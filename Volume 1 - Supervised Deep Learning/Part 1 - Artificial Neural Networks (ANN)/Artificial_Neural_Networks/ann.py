@@ -21,6 +21,7 @@ dataset = pd.read_csv('Churn_Modelling.csv')
 X = dataset.iloc[:, 3:13].values
 y = dataset.iloc[:, 13].values
 
+
 # Encoding categorical data
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 labelencoder_X_1 = LabelEncoder()
@@ -68,9 +69,13 @@ classifier.fit(X_train, y_train, batch_size = 10, epochs = 100)
 
 # Part 3 - Making predictions and evaluating the model
 
+new_pred = classifier.predict(sc.transform(np.array([[0.0, 0, 600, 1, 40, 3, 60000, 2, 1, 1, 50000]])))
+new_pred = (new_pred > 0.5)
+
 # Predicting the Test set results
 y_pred = classifier.predict(X_test)
 y_pred = (y_pred > 0.5)
+
 
 # Making the Confusion Matrix
 from sklearn.metrics import confusion_matrix
