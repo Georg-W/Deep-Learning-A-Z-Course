@@ -50,16 +50,16 @@ from keras.models import Sequential
 from keras.layers import Dense
 
 #Initialising the ANN
-classifier = Sequential()
+#classifier = Sequential()
 
 #adding input layer and the first hidden layer
-classifier.add(Dense(activation="relu", input_dim=11, units=6, kernel_initializer="uniform"))
+#classifier.add(Dense(activation="relu", input_dim=11, units=6, kernel_initializer="uniform"))
 
 #Adding a scond hidden layer
-classifier.add(Dense(activation="relu", units=6, kernel_initializer="uniform"))
+#classifier.add(Dense(activation="relu", units=6, kernel_initializer="uniform"))
 
 #Adding the output layer!
-classifier.add(Dense(activation="sigmoid", units=1, kernel_initializer="uniform"))
+#classifier.add(Dense(activation="sigmoid", units=1, kernel_initializer="uniform"))
 
 #Compiling the ANN
 #classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
@@ -86,7 +86,6 @@ classifier.add(Dense(activation="sigmoid", units=1, kernel_initializer="uniform"
 #Evaluating ANN
 from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.model_selection import cross_val_score
-import keras
 from keras.models import Sequential
 from keras.layers import Dense
 print("reached 1")
@@ -100,9 +99,15 @@ def build_classifier():
 print("reached 2")
 
 classifier = KerasClassifier(build_fn = build_classifier, batch_size = 10, epochs = 100)
-print("reached 3")
+print("reached 3", classifier)
 
-accuracies = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 10, n_jobs = -1)
+accuracies = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 10, n_jobs = 1)
+
+print("acc", accuracies)
+#classifier.fit(X_train, y_train, batch_size = 10, epochs = 100)
+
+mean = accuracies.mean()
+variance = accuracies.std()
 
 print("reached 4")
 
