@@ -62,21 +62,54 @@ classifier.add(Dense(activation="relu", units=6, kernel_initializer="uniform"))
 classifier.add(Dense(activation="sigmoid", units=1, kernel_initializer="uniform"))
 
 #Compiling the ANN
-classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
+#classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
 
 #Fitting ANN
-classifier.fit(X_train, y_train, batch_size = 10, epochs = 100)
+#classifier.fit(X_train, y_train, batch_size = 10, epochs = 100)
 
 # Part 3 - Making predictions and evaluating the model
 
-new_pred = classifier.predict(sc.transform(np.array([[0.0, 0, 600, 1, 40, 3, 60000, 2, 1, 1, 50000]])))
-new_pred = (new_pred > 0.5)
+#new_pred = classifier.predict(sc.transform(np.array([[0.0, 0, 600, 1, 40, 3, 60000, 2, 1, 1, 50000]])))
+#new_pred = (new_pred > 0.5)
 
 # Predicting the Test set results
-y_pred = classifier.predict(X_test)
-y_pred = (y_pred > 0.5)
+#y_pred = classifier.predict(X_test)
+#y_pred = (y_pred > 0.5)
 
 
 # Making the Confusion Matrix
-from sklearn.metrics import confusion_matrix
-cm = confusion_matrix(y_test, y_pred)
+#from sklearn.metrics import confusion_matrix
+#cm = confusion_matrix(y_test, y_pred)
+
+#Part4 Evaluating & Improving
+
+#Evaluating ANN
+from keras.wrappers.scikit_learn import KerasClassifier
+from sklearn.model_selection import cross_val_score
+import keras
+from keras.models import Sequential
+from keras.layers import Dense
+print("reached 1")
+def build_classifier():
+    classifier = Sequential()
+    classifier.add(Dense(activation="relu", input_dim=11, units=6, kernel_initializer="uniform"))
+    classifier.add(Dense(activation="relu", units=6, kernel_initializer="uniform"))
+    classifier.add(Dense(activation="sigmoid", units=1, kernel_initializer="uniform"))
+    classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
+    return classifier
+print("reached 2")
+
+classifier = KerasClassifier(build_fn = build_classifier, batch_size = 10, epochs = 100)
+print("reached 3")
+
+accuracies = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 10, n_jobs = -1)
+
+print("reached 4")
+
+#Improving the ANN
+
+#Tuning the ANN
+
+
+
+
