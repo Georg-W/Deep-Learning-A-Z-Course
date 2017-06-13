@@ -46,8 +46,6 @@ X_test = sc.transform(X_test)
 
 # Importing the Keras libraries and packages
 import keras
-from keras.models import Sequential
-from keras.layers import Dense
 
 #Initialising the ANN
 #classifier = Sequential()
@@ -84,36 +82,84 @@ from keras.layers import Dense
 #Part4 Evaluating & Improving
 
 #Evaluating ANN
-from keras.wrappers.scikit_learn import KerasClassifier
-from sklearn.model_selection import cross_val_score
-from keras.models import Sequential
-from keras.layers import Dense
-print("reached 1")
-def build_classifier():
-    classifier = Sequential()
-    classifier.add(Dense(activation="relu", input_dim=11, units=6, kernel_initializer="uniform"))
-    classifier.add(Dense(activation="relu", units=6, kernel_initializer="uniform"))
-    classifier.add(Dense(activation="sigmoid", units=1, kernel_initializer="uniform"))
-    classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
-    return classifier
-print("reached 2")
+#from keras.wrappers.scikit_learn import KerasClassifier
+#from sklearn.model_selection import cross_val_score
+#from keras.models import Sequential
+#from keras.layers import Dense
+#from keras.layers import Dropout
 
-classifier = KerasClassifier(build_fn = build_classifier, batch_size = 10, epochs = 100)
-print("reached 3", classifier)
+#print("reached 1")
+#def build_classifier():
+#    classifier = Sequential()
+#    classifier.add(Dense(activation="relu", input_dim=11, units=6, kernel_initializer="uniform")  
+#Added dropout for features against overfitting
+#    classifier.add(Dropout(p = 0.1))
+#    
+#    classifier.add(Dense(activation="relu", units=6, kernel_initializer="uniform"))
+#    classifier.add(Dense(activation="sigmoid", units=1, kernel_initializer="uniform"))
+#    classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
+#    return classifier
+#print("reached 2")
+#
+#classifier = KerasClassifier(build_fn = build_classifier, batch_size = 10, epochs = 100)
+#print("reached 3", classifier)
 
-accuracies = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 10, n_jobs = 1)
+#accuracies = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 10, n_jobs = 1)
 
-print("acc", accuracies)
+#print("acc", accuracies)
 #classifier.fit(X_train, y_train, batch_size = 10, epochs = 100)
 
-mean = accuracies.mean()
-variance = accuracies.std()
+#mean = accuracies.mean()
+#variance = accuracies.std()
 
 print("reached 4")
 
 #Improving the ANN
 
 #Tuning the ANN
+
+from keras.wrappers.scikit_learn import KerasClassifier
+from sklearn.model_selection import GridSearchCV
+from keras.models import Sequential
+from keras.layers import Dense
+
+print("reached 1")
+def build_classifier(optimizer):
+    classifier = Sequential()
+    classifier.add(Dense(activation="relu", input_dim=11, units=8, kernel_initializer="uniform"))
+    classifier.add(Dense(activation="relu", units=6, kernel_initializer="uniform"))
+    classifier.add(Dense(activation="relu", units=6, kernel_initializer="uniform"))
+    classifier.add(Dense(activation="relu", units=6, kernel_initializer="uniform"))
+    classifier.add(Dense(activation="sigmoid", units=1, kernel_initializer="uniform"))
+    classifier.compile(optimizer = optimizer, loss = 'binary_crossentropy', metrics = ['accuracy'])
+    return classifier
+print("reached 2")
+
+classifier = KerasClassifier(build_fn = build_classifier)
+
+parameters = {'batch_size': [28],
+              'epochs': [500],
+              'optimizer': ['rmsprop']}
+
+grid_search = GridSearchCV(estimator = classifier,
+                           param_grid = parameters,
+                           scoring = 'accuracy',
+                           cv = 10)
+grid_search = grid_search.fit(X_train, y_train)
+best_params = grid_search.best_params_
+best_acc = grid_search.best_score_
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
