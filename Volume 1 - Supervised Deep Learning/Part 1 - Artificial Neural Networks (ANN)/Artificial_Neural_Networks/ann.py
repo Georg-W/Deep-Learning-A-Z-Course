@@ -89,20 +89,27 @@ from sklearn.model_selection import cross_val_score
 import keras
 from keras.models import Sequential
 from keras.layers import Dense
+from keras.layers import Dropout
+
 print("reached 1")
 def build_classifier():
     classifier = Sequential()
+    #Layer with Dropout
     classifier.add(Dense(activation="relu", input_dim=11, units=6, kernel_initializer="uniform"))
+    classifier.add(Dropout(rate = 0.1))
+    
     classifier.add(Dense(activation="relu", units=6, kernel_initializer="uniform"))
+    classifier.add(Dropout(rate = 0.1))
+
     classifier.add(Dense(activation="sigmoid", units=1, kernel_initializer="uniform"))
     classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
     return classifier
 print("reached 2")
 
-classifier = KerasClassifier(build_fn = build_classifier, batch_size = 10, epochs = 100)
+classifier = KerasClassifier(build_fn = build_classifier, batch_size = 10, epochs = 1)
 print("reached 3")
 
-accuracies = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 10, n_jobs = -1)
+accuracies = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 10, n_jobs = 1)
 
 print("reached 4")
 
