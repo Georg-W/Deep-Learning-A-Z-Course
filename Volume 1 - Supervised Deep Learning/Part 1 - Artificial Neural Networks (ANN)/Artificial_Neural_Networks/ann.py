@@ -126,16 +126,21 @@ from keras.layers import Dense
 print("reached 1")
 def build_classifier(optimizer):
     classifier = Sequential()
+    
     classifier.add(Dense(activation="relu", input_dim=11, units=8, kernel_initializer="uniform"))
     classifier.add(Dense(activation="relu", units=6, kernel_initializer="uniform"))
     classifier.add(Dense(activation="relu", units=6, kernel_initializer="uniform"))
-    classifier.add(Dense(activation="relu", units=6, kernel_initializer="uniform"))
+
+
     classifier.add(Dense(activation="sigmoid", units=1, kernel_initializer="uniform"))
     classifier.compile(optimizer = optimizer, loss = 'binary_crossentropy', metrics = ['accuracy'])
     return classifier
 print("reached 2")
 
-classifier = KerasClassifier(build_fn = build_classifier)
+classifier = KerasClassifier(build_fn = build_classifier, batch_size = 10, epochs = 1)
+print("reached 3")
+
+accuracies = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 10, n_jobs = 1)
 
 parameters = {'batch_size': [28],
               'epochs': [500],
@@ -148,15 +153,6 @@ grid_search = GridSearchCV(estimator = classifier,
 grid_search = grid_search.fit(X_train, y_train)
 best_params = grid_search.best_params_
 best_acc = grid_search.best_score_
-
-
-
-
-
-
-
-
-
 
 
 
